@@ -1,0 +1,9 @@
+.venv/
+__pycache__/
+brand/ArchivoBlack-Regular.ttf
+
+# PyCharm / JetBrains
+.idea/
+*.iws
+*.iml
+*.ipr
