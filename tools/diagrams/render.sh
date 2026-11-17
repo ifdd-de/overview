@@ -9,8 +9,11 @@
 # into ${XDG_CACHE_HOME:-$HOME/.cache}/ifdd and its SHA-256 is checked.
 #
 # The check compares the source PlantUML embeds in every SVG
-# (<?plantuml-src ...?>), not the drawing: fonts and the Graphviz version
-# change the layout from one machine to the next.
+# (<?plantuml-src ...?>), decoded to text, not the drawing: fonts and the
+# Graphviz version change the layout from one machine to the next. The
+# embedded string itself is compressed (deflate), and its bytes depend on the
+# Java runtime (Temurin and Ubuntu's OpenJDK give different strings for the
+# same source), so it is decoded before the comparison.
 set -euo pipefail
 
 version="1.2026.10"
@@ -47,7 +50,23 @@ check_sha "$jar"
 tmp=$(mktemp -d)
 trap 'rm -rf "$tmp"' EXIT
 
-embedded() { grep -o '<?plantuml-src [^?]*?>' "$1" || true; }
+# Print the source embedded in an SVG as text (empty if there is none):
+# PlantUML's base64 variant (0-9A-Za-z-_), then raw deflate.
+embedded() {
+    python3 - "$1" <<'EOF'
+import re, sys, zlib
+ALPHABET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_"
+match = re.search(r"<\?plantuml-src ([0-9A-Za-z_-]+)\?>", open(sys.argv[1], encoding="utf-8").read())
+if match:
+    data = bytearray()
+    text = match.group(1)
+    for i in range(0, len(text), 4):
+        chunk = [ALPHABET.index(c) for c in text[i:i + 4]] + [0, 0, 0]
+        n = (chunk[0] << 18) | (chunk[1] << 12) | (chunk[2] << 6) | chunk[3]
+        data += bytes([n >> 16, (n >> 8) & 255, n & 255])
+    sys.stdout.write(zlib.decompressobj(-15).decompress(bytes(data)).decode("utf-8"))
+EOF
+}
 
 status=0
 count=0
