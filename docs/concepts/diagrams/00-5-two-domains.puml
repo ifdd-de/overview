@@ -1,0 +1,18 @@
+@startuml
+left to right direction
+rectangle "domain: grid" {
+  database "asset register" as s1
+  rectangle "ct" as ct1
+}
+rectangle "domain: ops" {
+  database "maintenance plan" as s2
+  rectangle "ct" as ct2
+}
+rectangle "be" as be
+rectangle "client with\nexample.ifdd.de" as client
+s1 --> ct1
+s2 --> ct2
+ct1 --> be
+ct2 --> be
+be --> client
+@enduml

@@ -1,0 +1,13 @@
+@startuml
+left to right direction
+rectangle "client" as client
+rectangle "node of grid" {
+  rectangle "be" as be1
+}
+rectangle "node of ops" {
+  rectangle "be" as be2
+}
+client --> be1
+client --> be2
+be2 ..> be1 : refers to the breaker by its identifier
+@enduml

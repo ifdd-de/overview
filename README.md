@@ -66,6 +66,7 @@ repositories of `ifdd-de` in two diagrams.
 | `brand/` | Logo generator and generated assets |
 | `README_logos.md` | How to regenerate the brand assets |
 | `HISTORY_ifdd.md` | Where this comes from, and what was learned |
+| `tools/diagrams/` | Renders the PlantUML diagrams of `docs/` and checks the SVGs |
 
 New descriptive material about `ifdd.de` belongs in `ifdd-de/overview`. Implementations
 get their own repository in the same organisation and link back to the concept they

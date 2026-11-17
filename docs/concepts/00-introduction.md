@@ -21,17 +21,7 @@ the same circuit breakers:
 - the **ops** department keeps the maintenance plan (interval, last and next
   inspection, condition).
 
-```mermaid
-flowchart LR
-  subgraph example["organisation: example"]
-    subgraph grid["domain: grid"]
-      s1[("source 1<br/>asset register")]
-    end
-    subgraph ops["domain: ops"]
-      s2[("source 2<br/>maintenance plan")]
-    end
-  end
-```
+![The organisation example with the domains grid (source 1, asset register) and ops (source 2, maintenance plan)](diagrams/00-1-domains.svg)
 
 > **Domain** — a business area that owns its data and stays responsible for it. In
 > d4 this was the *company*, a "context of same ownership".
@@ -63,12 +53,7 @@ reads a source, writes JSON-LD and checks it against the published contexts.
 Workflows and notebooks that read sources can also run in
 [`wf`](https://github.com/ifdd-de/wf).
 
-```mermaid
-flowchart LR
-  s1[("asset register")] --> ct["ct<br/>read, translate, check"]
-  schema["schema<br/>contexts"] -.-> ct
-  ct --> doc["JSON-LD document<br/>context breaker.grid.example.ifdd.de"]
-```
+![ct reads the asset register, checks against the contexts of schema and writes a JSON-LD document with the context breaker.grid.example.ifdd.de](diagrams/00-2-source-to-json-ld.svg)
 
 `ct` checks today that a document uses only terms its context defines. Checks of
 types and cardinalities are **planned**.
@@ -82,11 +67,7 @@ version with two time axes, when a value is valid and when the service knew it. 
 source still owns the values; `be` records when it last received and confirmed them
 (`c_cacheCreated`, `c_cacheUpdated`).
 
-```mermaid
-flowchart LR
-  ct["ct"] -- "PUT /products/{id}" --> be["be<br/>REST, bitemporal"]
-  be --- db[("PostgreSQL")]
-```
+![ct sends PUT /products/{id} to be, which stores the documents bitemporally in PostgreSQL](diagrams/00-3-keeping.svg)
 
 One object is stored as one document per context. The breaker `Q1` has
 
@@ -105,13 +86,7 @@ Stored data is only useful if someone can read it. People use
 services use the REST interface of `be` directly. Both sign in through
 [`keycloak`](https://github.com/ifdd-de/keycloak) (OpenID Connect).
 
-```mermaid
-flowchart LR
-  user(["person"]) --> ui["ui<br/>read only"]
-  script(["script or service"]) --> be
-  ui --> be["be"]
-  ui -.-> type["type / unit<br/>labels, units"]
-```
+![A person uses ui, a script or service calls be directly; ui reads from be and takes labels and units from type and unit](diagrams/00-4-users.svg)
 
 The `ui` builds one tab per context of an object. Labels, help texts and the order
 of the fields come from the vocabulary in `type`, units from `unit`; nothing is
@@ -154,18 +129,7 @@ the breaker from both sides: its rated values from the asset register and its ne
 inspection from the maintenance plan. Neither department had to give up its data
 or its system.
 
-```mermaid
-flowchart LR
-  subgraph grid["domain: grid"]
-    s1[("asset register")] --> ct1["ct"]
-  end
-  subgraph ops["domain: ops"]
-    s2[("maintenance plan")] --> ct2["ct"]
-  end
-  ct1 --> be["be"]
-  ct2 --> be
-  be --> client(["client with<br/>example.ifdd.de"])
-```
+![Each domain has its own source and ct; both write to be, which a client of example.ifdd.de reads](diagrams/00-5-two-domains.svg)
 
 ## Now take off a little
 
@@ -176,18 +140,7 @@ records live in two places. They still fit together because
   (`id.ifdd.de/<domain>/<uuid>`, see [02 — Namespace](02-namespace.md)),
 - both sides use the same published vocabulary.
 
-```mermaid
-flowchart LR
-  subgraph nodeGrid["node of grid"]
-    be1["be"]
-  end
-  subgraph nodeOps["node of ops"]
-    be2["be"]
-  end
-  client(["client"]) --> be1
-  client --> be2
-  be2 -. "refers to the breaker by its identifier" .-> be1
-```
+![A client reads from the be nodes of grid and ops; the ops node refers to the breaker on the grid node by its identifier](diagrams/00-6-two-nodes.svg)
 
 A `be` does not fetch records from another `be`. Combining them is the client's job:
 it reads both and joins them by identifier. That is the point of

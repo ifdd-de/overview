@@ -1,0 +1,11 @@
+@startuml
+left to right direction
+rectangle "organisation: example" {
+  rectangle "domain: grid" {
+    database "source 1\nasset register" as s1
+  }
+  rectangle "domain: ops" {
+    database "source 2\nmaintenance plan" as s2
+  }
+}
+@enduml

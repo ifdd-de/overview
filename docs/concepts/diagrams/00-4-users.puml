@@ -1,0 +1,12 @@
+@startuml
+left to right direction
+actor "person" as user
+rectangle "script or service" as script
+rectangle "ui\nread only" as ui
+rectangle "be" as be
+rectangle "type / unit\nlabels, units" as type
+user --> ui
+script --> be
+ui --> be
+ui ..> type
+@enduml
