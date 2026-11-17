@@ -1,0 +1,48 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+package "Concept" as concept {
+  rectangle "overview" as overview
+  rectangle "website" as website
+}
+package "Tools" as tools {
+  rectangle "tools-linkml-graph" as linkmlgraph
+  rectangle "tools-sbom" as sbom
+  rectangle "tools-pentest" as pentest
+}
+rectangle "model" as model
+package "Runtime packages" as packages {
+  rectangle "be-core" as becore
+  rectangle "ts-core" as tscore
+}
+package "Service templates" as templates {
+  rectangle "keycloak" as keycloak
+  package "Content services" as content {
+    rectangle "schema" as schema
+    rectangle "type" as type
+    rectangle "unit" as unit
+  }
+  package "Services with a realm client" as clients {
+    rectangle "be" as be
+    rectangle "ui" as ui
+    rectangle "ct" as ct
+    rectangle "ts-api" as tsapi
+    rectangle "ts" as ts
+    rectangle "proxy" as proxy
+  }
+  rectangle "wf" as wf
+}
+model --> content : generates contexts,\nvocabularies, units
+keycloak --> clients : realm clients
+content --> be
+content --> ui
+content --> ct
+content --> tsapi
+becore --> be : runtime
+tscore --> tsapi : runtime
+tsapi --> ts : ingest network
+proxy --> wf : login gate
+linkmlgraph ..> model : can render data of
+sbom ..> packages : can list dependencies
+pentest ..> templates : can scan instances
+@enduml

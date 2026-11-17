@@ -27,8 +27,10 @@ packages.
   its own records from its own endpoint and stays responsible for them.
 - **A shared schema replaces a shared system.** Records are checked against published
   JSON-LD contexts and vocabularies and served as JSON-LD, so a YAML file, a Django
-  service and an ERP system can take part in the same federation. A LinkML schema as
-  the single source of these descriptions is planned, not implemented.
+  service and an ERP system can take part in the same federation. A template that
+  generates these descriptions from a LinkML schema exists as a prototype
+  ([`model`](https://github.com/ifdd-de/model), see
+  [ADR 0003](docs/decisions/0003-linkml-as-source-of-the-model.md)).
 - **Identity is separate from location.** Identifiers are permanent addresses; hosts
   are operational addresses that may change. That separation is what makes the whole
   federation survive reorganisation.
@@ -52,12 +54,14 @@ know where it lives.
 
 New here? [A short walk through IFDD](docs/concepts/00-introduction.md) builds the
 picture step by step, from one data source to several domains.
+[How the repositories fit together](docs/concepts/03-repositories.md) shows all
+repositories of `ifdd-de` in two diagrams.
 
 ## Repository map
 
 | Path | Contents |
 | --- | --- |
-| `docs/concepts/` | The ideas: introduction, naming, namespace |
+| `docs/concepts/` | The ideas: introduction, naming, namespace, repositories |
 | `docs/decisions/` | Architecture decision records, newest last |
 | `brand/` | Logo generator and generated assets |
 | `README_logos.md` | How to regenerate the brand assets |
@@ -95,6 +99,12 @@ Issues and pull requests are welcome, especially:
 - counter-examples where the federated approach breaks down,
 - adapters for source systems that are not yet covered,
 - corrections — technical claims in this repository are meant to be falsifiable.
+
+## AI assistance
+
+Some parts of this repository, in particular the texts, the diagrams and the
+scripts, were developed or improved with the help of large language
+models (LLMs). All changes were reviewed and released by the maintainer.
 
 ## License
 
