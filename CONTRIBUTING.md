@@ -17,6 +17,9 @@ organisation and links back here.
   Removing such a marker requires naming the source.
 - **Decisions are append-only.** A superseded decision stays in place and gets a
   `Superseded by` line; it is not rewritten.
+- **Diagrams** are PlantUML sources in `docs/**/diagrams/*.puml`. Render them with
+  `tools/diagrams/render.sh` (Java and Graphviz needed) and commit the SVG next to
+  the source; the CI checks that every SVG matches its source.
 - **Identifiers never move.** Proposals that put an owner, an environment or a
   visibility class into a permanent IRI will be rejected — see
   `docs/concepts/02-namespace.md`.

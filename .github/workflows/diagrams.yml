@@ -1,0 +1,29 @@
+name: Diagrams
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: SVGs match their PlantUML sources
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Install Java and Graphviz (PlantUML)
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -y -q default-jre-headless graphviz
+
+      - name: Check
+        run: tools/diagrams/render.sh --check

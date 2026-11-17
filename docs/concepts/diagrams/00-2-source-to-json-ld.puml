@@ -1,0 +1,10 @@
+@startuml
+left to right direction
+database "asset register" as s1
+rectangle "ct\nread, translate, check" as ct
+rectangle "schema\ncontexts" as schema
+rectangle "JSON-LD document\ncontext breaker.grid.example.ifdd.de" as doc
+s1 --> ct
+schema ..> ct
+ct --> doc
+@enduml

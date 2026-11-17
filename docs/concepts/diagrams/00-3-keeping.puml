@@ -1,0 +1,8 @@
+@startuml
+left to right direction
+rectangle "ct" as ct
+rectangle "be\nREST, bitemporal" as be
+database "PostgreSQL" as db
+ct --> be : PUT /products/{id}
+be -- db
+@enduml
