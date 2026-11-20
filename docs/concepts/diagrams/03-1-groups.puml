@@ -3,8 +3,9 @@ left to right direction
 rectangle "Concept\noverview, website" as concept
 rectangle "Model template\nmodel (LinkML)" as model
 rectangle "Runtime packages\nbe-core, ts-core" as packages
-rectangle "Service templates\nproxy, keycloak, be, ui,\nschema, type, unit,\nct, ts, ts-api, wf" as templates
+rectangle "Service templates\nproxy, keycloak, be, ui,\nschema, type, unit,\nct, ts, ts-api, wf, lab" as templates
 rectangle "Tools\ntools-pentest, tools-sbom,\ntools-linkml-graph" as tools
+rectangle "Installation tool\nmeta (ifdd-meta)" as installation
 rectangle "Instances\n(own repositories of an installation)" as instances
 concept ..> templates : describes
 model --> templates : contexts, vocabularies\nand units for schema, type, unit
@@ -12,4 +13,5 @@ packages --> templates : runtime of be and ts-api
 templates --> instances : cruft create, cruft update
 model --> instances : cruft create, cruft update
 tools ..> instances : can check and document
+installation ..> instances : can create, run and test
 @enduml
