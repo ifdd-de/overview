@@ -11,6 +11,7 @@ package "Tools" as tools {
   rectangle "tools-pentest" as pentest
 }
 rectangle "model" as model
+rectangle "meta" as meta
 package "Runtime packages" as packages {
   rectangle "be-core" as becore
   rectangle "ts-core" as tscore
@@ -29,6 +30,7 @@ package "Service templates" as templates {
     rectangle "ts-api" as tsapi
     rectangle "ts" as ts
     rectangle "proxy" as proxy
+    rectangle "lab" as lab
   }
   rectangle "wf" as wf
 }
@@ -45,4 +47,5 @@ proxy --> wf : login gate
 linkmlgraph ..> model : can render data of
 sbom ..> packages : can list dependencies
 pentest ..> templates : can scan instances
+meta ..> templates : can create and run instances of
 @enduml
