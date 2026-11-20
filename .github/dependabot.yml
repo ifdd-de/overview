@@ -1,0 +1,12 @@
+# Dependabot version updates for overview: the actions of its workflows
+# (pinned to commit SHAs with the version as comment).
+# Security updates are a repository setting and do not depend on this file.
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    groups:
+      actions:
+        patterns: ["*"]
